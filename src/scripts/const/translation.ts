@@ -1,7 +1,11 @@
+import getYearsFromDate from "@scripts/helpers/getYearsFromDate";
 import TranslationModel from "@scripts/models/TranslationModel";
+import { LANGUAGE_ENUM } from "./const";
 
 // «
 // «
+
+const birthDay = new Date("2005-01-21");
 
 const translation: TranslationModel = {
     "be-BY": {
@@ -52,7 +56,10 @@ const translation: TranslationModel = {
             about: "пра мяне",
             startTitle: "Поўнае імя - Лабуць Кірыл Анатольевіч",
             startText: `
-                Мне <strong>19 гадоў</strong>, і я нарадзіўся і жыву ў крутой краіне - <strong>Беларусі</strong>.
+                Мне <strong>${getYearsFromDate(
+                    birthDay,
+                    LANGUAGE_ENUM.BY
+                )}</strong>, і я нарадзіўся і жыву ў крутой краіне - <strong>Беларусі</strong>.
                 Родам з вёскі, таму з прыродай у нас вельмі цесныя адносіны,
                 ганаруся сваімі каранямі. Я ўвесь час знаходжуся ў імкненні да новых ведаў і прыгод.
                 Вельмі шаную цішыню і спакой, што дапамагае атрымліваць асалоду ад кожным
@@ -103,7 +110,8 @@ const translation: TranslationModel = {
             myAvatar: "Мой аватар",
             collegePhoto: "Фота каледжа",
             meAndFootballTeam: "Фота са мной і маёй футбольнай камандай",
-            meAndFiendInPingPong: "Фотаздымак мяне і майго сябра, якія гуляюць у настольны тэніс",
+            meAndFiendInPingPong:
+                "Фотаздымак мяне і майго сябра, якія гуляюць у настольны тэніс",
             meAndBelaz: "Фота са мной і машынай БелАЗ",
             pigeonImg: "Малюнак з галубамі",
         },
@@ -116,17 +124,19 @@ const translation: TranslationModel = {
         },
 
         contactFormErrorMessage: {
-            nameFieldLength: "Даўжыня імя павінна быць <strong>ад 2 да 20</strong> сімвалаў",
-            emailFieldFormat: "Увядзіце электронную пошту ў фармаце '<strong>email@example.domen</strong>'",
-            messageFieldLength: "Даўжыня паведамлення павінна быць больш <strong>чым 30</strong> знакаў",
+            nameFieldLength:
+                "Даўжыня імя павінна быць <strong>ад 2 да 20</strong> сімвалаў",
+            emailFieldFormat:
+                "Увядзіце электронную пошту ў фармаце '<strong>email@example.domen</strong>'",
+            messageFieldLength:
+                "Даўжыня паведамлення павінна быць больш <strong>чым 30</strong> знакаў",
         },
 
         notification: {
             successEmailSend: "email паспяхова адпраўлены!",
-            failedEmailSend: "не атрымалася адправіць email"
+            failedEmailSend: "не атрымалася адправіць email",
         },
     },
-
 
     "ru-RU": {
         innerHtml: {
@@ -173,7 +183,10 @@ const translation: TranslationModel = {
             about: "обо мне",
             startTitle: "Полное имя - Лабуть Кирилл Анатольевич",
             startText: `
-                Мне <strong>19 лет</strong>, и я родился и живу в крутой стране - <strong>Беларуси</strong>. 
+                Мне <strong>${getYearsFromDate(
+                    birthDay,
+                    LANGUAGE_ENUM.RU
+                )}</strong>, и я родился и живу в крутой стране - <strong>Беларуси</strong>. 
                 Родом из деревни, поэтому с природой у нас очень тесные отношения,
                 горжусь своими корнями. Я постоянно нахожусь в стремлении к новым знаниям и приключениям. 
                 Очень ценю тишину и спокойствие, что помогает наслаждаться каждым
@@ -237,17 +250,19 @@ const translation: TranslationModel = {
         },
 
         contactFormErrorMessage: {
-            nameFieldLength: "Длина имени должна быть <strong>от 2 до 20</strong> символов",
-            emailFieldFormat: "Введите электронную почту в формате '<strong>email@example.domen</strong>'",
-            messageFieldLength: "Длина сообщения должна быть больше <strong>чем 30</strong> символов",
+            nameFieldLength:
+                "Длина имени должна быть <strong>от 2 до 20</strong> символов",
+            emailFieldFormat:
+                "Введите электронную почту в формате '<strong>email@example.domen</strong>'",
+            messageFieldLength:
+                "Длина сообщения должна быть больше <strong>чем 30</strong> символов",
         },
 
         notification: {
             successEmailSend: "email успешно отправлен!",
-            failedEmailSend: "не удалось отправить email"
+            failedEmailSend: "не удалось отправить email",
         },
     },
-
 
     "en-US": {
         innerHtml: {
@@ -293,7 +308,10 @@ const translation: TranslationModel = {
             about: "about",
             startTitle: "Full name - Labut Kirill Anatolyevich",
             startText: `
-                I am <strong>19 years old</strong>, and I was born and live in a cool country - <strong>Belarus</strong>. 
+                I am <strong>${getYearsFromDate(
+                    birthDay,
+                    LANGUAGE_ENUM.EN
+                )}old</strong>, and I was born and live in a cool country - <strong>Belarus</strong>. 
                 From the village, so we have a very close relationship with nature,
                 Proud of my roots. I am always on the lookout for new knowledge and adventures. 
                 Very much appreciate the silence and peace that helps to enjoy each
@@ -357,16 +375,19 @@ const translation: TranslationModel = {
         },
 
         contactFormErrorMessage: {
-            nameFieldLength: "Name length should be <strong>from 2 to 20</strong> characters",
-            emailFieldFormat: "Enter email in format '<strong>email@example.domen</strong>'",
-            messageFieldLength: "Message length must be more <strong>than 30</strong> characters",
+            nameFieldLength:
+                "Name length should be <strong>from 2 to 20</strong> characters",
+            emailFieldFormat:
+                "Enter email in format '<strong>email@example.domen</strong>'",
+            messageFieldLength:
+                "Message length must be more <strong>than 30</strong> characters",
         },
 
         notification: {
             successEmailSend: "email sent successfully!",
-            failedEmailSend: "failed to send email"
+            failedEmailSend: "failed to send email",
         },
-    }
-}
+    },
+};
 
 export default translation;

@@ -1,4 +1,8 @@
-import { LANGUAGE_ENUM, STORAGE_KEYS } from "@scripts/const/const";
+import {
+    LANGUAGE_ENUM,
+    PAGE_NAME_ENUM,
+    STORAGE_KEYS,
+} from "@scripts/const/const";
 import { convertStringToLanguageEnum } from "@scripts/helpers/convertToEnum";
 import { convertElement } from "@scripts/helpers/elements";
 import translation from "@scripts/const/translation";
@@ -6,26 +10,28 @@ import {
     TranslationModel_ChartTitle,
     TranslationModel_ImageAlt,
     TranslationModel_InnerHtml,
-    TranslationModel_Title
+    TranslationModel_Title,
 } from "@scripts/models/TranslationModel";
 import Layout from "@scripts/service/Layout";
 
 type TranslatorElementListType = {
-    selectList: HTMLSelectElement,
-}
+    selectList: HTMLSelectElement;
+};
 
 type TranslatorSelectorForElementListType = {
-    selectList: string,
-}
+    selectList: string;
+};
 
-const default_translatorSelectorForElementList: TranslatorSelectorForElementListType = {
-    selectList: "#languageSelectList",
-}
+const default_translatorSelectorForElementList: TranslatorSelectorForElementListType =
+    {
+        selectList: "#languageSelectList",
+    };
 
 class Translator {
     private _elementList: TranslatorElementListType;
     private _baseLanguage: LANGUAGE_ENUM = LANGUAGE_ENUM.EN;
     private _currentLanguage: LANGUAGE_ENUM = this._baseLanguage;
+    private _lastPage: PAGE_NAME_ENUM = PAGE_NAME_ENUM.home;
 
     public get CurrentLanguage() {
         return this._currentLanguage;
@@ -36,76 +42,110 @@ class Translator {
     }
 
     public static get CurrentLanguageFromStorage(): LANGUAGE_ENUM {
-        return convertStringToLanguageEnum(localStorage.getItem(STORAGE_KEYS.local.currentLanguage) || LANGUAGE_ENUM.EN);
+        return convertStringToLanguageEnum(
+            localStorage.getItem(STORAGE_KEYS.local.currentLanguage) ||
+                LANGUAGE_ENUM.EN
+        );
     }
 
     public constructor(
         baseLanguage: LANGUAGE_ENUM,
-        selectorForElementList: TranslatorSelectorForElementListType = default_translatorSelectorForElementList,
+        selectorForElementList: TranslatorSelectorForElementListType = default_translatorSelectorForElementList
     ) {
-        this._elementList = Layout.getElementsBySelectorList
-            <TranslatorElementListType, TranslatorSelectorForElementListType>(selectorForElementList);
+        this._elementList = Layout.getElementsBySelectorList<
+            TranslatorElementListType,
+            TranslatorSelectorForElementListType
+        >(selectorForElementList);
         this._baseLanguage = baseLanguage;
-        this._currentLanguage =
-            convertStringToLanguageEnum(
-                localStorage.getItem(STORAGE_KEYS.local.currentLanguage) || baseLanguage);
+        this._currentLanguage = convertStringToLanguageEnum(
+            localStorage.getItem(STORAGE_KEYS.local.currentLanguage) ||
+                baseLanguage
+        );
 
         this._elementList.selectList.value = this._currentLanguage;
     }
 
     public changeLanguage = () => {
-        const selectedLanguage: LANGUAGE_ENUM =
-            convertStringToLanguageEnum(
-                this._elementList.selectList.options[this._elementList.selectList.selectedIndex].value);
+        const selectedLanguage: LANGUAGE_ENUM = convertStringToLanguageEnum(
+            this._elementList.selectList.options[
+                this._elementList.selectList.selectedIndex
+            ].value
+        );
 
         document.documentElement.setAttribute("lang", selectedLanguage);
 
         this.CurrentLanguage = selectedLanguage;
 
         this.translateSite();
+        this.setDocumentTitle(this._lastPage);
     };
 
     public translateSite = () => {
-        document
-            .querySelectorAll("[translate-key]")
-            .forEach(el => {
-                const translateKey = el.getAttribute("translate-key") as keyof TranslationModel_InnerHtml;
-                const oldInnerHtml = el.innerHTML;
+        document.querySelectorAll("[translate-key]").forEach((el) => {
+            const translateKey = el.getAttribute(
+                "translate-key"
+            ) as keyof TranslationModel_InnerHtml;
+            const oldInnerHtml = el.innerHTML;
 
-                el.innerHTML = translation[this._currentLanguage].innerHtml[translateKey] || oldInnerHtml;
-            });
+            el.innerHTML =
+                translation[this._currentLanguage].innerHtml[translateKey] ||
+                oldInnerHtml;
+        });
 
-        document
-            .querySelectorAll("[translate-title-key]")
-            .forEach(el => {
-                const htmlEl: HTMLElement = convertElement<HTMLElement>(el);
+        document.querySelectorAll("[translate-title-key]").forEach((el) => {
+            const htmlEl: HTMLElement = convertElement<HTMLElement>(el);
 
-                const translateTitleKey = htmlEl.getAttribute("translate-title-key") as keyof TranslationModel_Title;
-                const oldTitle = htmlEl.title;
+            const translateTitleKey = htmlEl.getAttribute(
+                "translate-title-key"
+            ) as keyof TranslationModel_Title;
+            const oldTitle = htmlEl.title;
 
-                htmlEl.title = translation[this._currentLanguage].title[translateTitleKey] || oldTitle;
-            });
+            htmlEl.title =
+                translation[this._currentLanguage].title[translateTitleKey] ||
+                oldTitle;
+        });
 
-        document
-            .querySelectorAll("[translate-alt-key]")
-            .forEach(el => {
-                const imgEl: HTMLImageElement = convertElement<HTMLImageElement>(el);
+        document.querySelectorAll("[translate-alt-key]").forEach((el) => {
+            const imgEl: HTMLImageElement =
+                convertElement<HTMLImageElement>(el);
 
-                const translateAltKey = imgEl.getAttribute("translate-alt-key") as keyof TranslationModel_ImageAlt;
-                const oldAlt = imgEl.alt;
+            const translateAltKey = imgEl.getAttribute(
+                "translate-alt-key"
+            ) as keyof TranslationModel_ImageAlt;
+            const oldAlt = imgEl.alt;
 
-                imgEl.alt = translation[this._currentLanguage].imageAlt[translateAltKey] || oldAlt;
-            });
+            imgEl.alt =
+                translation[this._currentLanguage].imageAlt[translateAltKey] ||
+                oldAlt;
+        });
 
         document
             .querySelectorAll("[translate-chart-title-key]")
-            .forEach(el => {
-                const translateChartTitleKey = el.getAttribute("translate-chart-title-key") as keyof TranslationModel_ChartTitle;
+            .forEach((el) => {
+                const translateChartTitleKey = el.getAttribute(
+                    "translate-chart-title-key"
+                ) as keyof TranslationModel_ChartTitle;
                 const oldChartTitle = el.innerHTML;
 
-                el.innerHTML = translation[this._currentLanguage].chartTitle[translateChartTitleKey] || oldChartTitle;
+                el.innerHTML =
+                    translation[this._currentLanguage].chartTitle[
+                        translateChartTitleKey
+                    ] || oldChartTitle;
             });
-    }
+    };
+
+    public setDocumentTitle = (currentPage: PAGE_NAME_ENUM) => {
+        this._lastPage = currentPage;
+
+        const translateCurrentPage =
+            translation[this._currentLanguage].innerHtml[
+                currentPage as keyof TranslationModel_InnerHtml
+            ];
+
+        if (translateCurrentPage)
+            document.title = "fok ∙ " + translateCurrentPage;
+        else document.title = "fok";
+    };
 }
 
 export default Translator;
